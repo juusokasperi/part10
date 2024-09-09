@@ -7,9 +7,10 @@ const theme = {
 	  textSecondary: '#586069',
 	  textInvert: '#FFFFFF',
 	  primary: '#0366d6',
+	  error: '#d73a4a',
 	},
 	fontSizes: {
-	  body: 14,
+	  body: 15,
 	  subheading: 16,
 	},
 	fonts: {
