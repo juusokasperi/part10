@@ -3,6 +3,7 @@ import { TextInput, Pressable, View, StyleSheet } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
+import useSignIn from '../hooks/useSignIn';
 import theme from '../theme';
 
 const validationSchema = yup.object().shape({
@@ -87,9 +88,17 @@ const SignInForm = ({ onSubmit }) => {
 }
 
 const SignIn = () => {
-	const onSubmit = values => {
-		console.log(values);
-	}
+	const [signIn] = useSignIn();
+	const onSubmit = async (values) => {
+		const { username, password } = values;
+
+		try {
+			const { data } = await signIn({ username, password });
+			console.log('Sign in successful');
+		} catch (error) {
+			console.log('Sign in error:', error);
+		}
+};
 
 	return <SignInForm onSubmit={onSubmit} />;
 };
