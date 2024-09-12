@@ -76,7 +76,7 @@ const DetailedInfo = ({ data }) => (
 )
 
 const RepositoryItem = ({ data }) => (
-	<View style={styles.flexContainer}>
+	<View testID="repositoryItem" style={styles.flexContainer}>
 		<BasicInfo data={data} />
 		<DetailedInfo data={data} />
 	</View>
