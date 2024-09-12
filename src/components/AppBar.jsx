@@ -1,6 +1,9 @@
 import { View, ScrollView, Pressable, StyleSheet } from 'react-native';
 import { Link } from 'react-router-native';
 
+import { useQuery } from '@apollo/client';
+import { ME } from '../graphql/queries';
+
 import theme from '../theme';
 import Text from "./Text";
 import Constants from 'expo-constants';
@@ -27,11 +30,18 @@ const AppBarTab = ({ buttonName, link }) => (
 	)
 
 const AppBar = () => {
+  const { data } = useQuery(ME);
+  const isLoggedIn = data?.me;
+
   return (
   	<View style={styles.appBar}>
 		<ScrollView horizontal style={styles.flexRow}>
 		<AppBarTab buttonName="Repositories" link="/"/>
-		<AppBarTab buttonName="Sign in" link="/login" />
+			{isLoggedIn ? (
+				<AppBarTab buttonName="Sign out" link="/logout" />
+			) : (
+				<AppBarTab buttonName="Sign in" link="/login" />
+			)}
 		</ScrollView>
 	</View>
   )
