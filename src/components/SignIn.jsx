@@ -41,7 +41,7 @@ const initialValues = {
 	password: '',
 };
 
-const SignInForm = ({ onSubmit }) => {
+export const SignInForm = ({ onSubmit }) => {
 	const formik = useFormik({
 		initialValues,
 		validationSchema,
@@ -56,6 +56,7 @@ const SignInForm = ({ onSubmit }) => {
 			]}>
 				<TextInput
 					placeholder="Username"
+					autoCapitalize='none'
 					value={formik.values.username}
 					onChangeText={formik.handleChange('username')}
 				/>
@@ -84,17 +85,23 @@ const SignInForm = ({ onSubmit }) => {
 	)
 }
 
-const SignIn = () => {
+const signInHandler = () => {
 	const [signIn] = useSignIn();
 	const navigate = useNavigate();
 
-	const onSubmit = async (values) => {
+	const handleSignIn = async (values) => {
 		const { username, password } = values;
 		await signIn({ username, password });
 		navigate("/");
 	};
 
-	return <SignInForm onSubmit={onSubmit} />;
+	return handleSignIn;
+}
+
+const SignIn = () => {
+	const handleSignIn = signInHandler();
+
+	return <SignInForm onSubmit={handleSignIn} />;
 };
 
 export default SignIn;

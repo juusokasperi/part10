@@ -12,7 +12,7 @@ const theme = {
 	  error: '#d73a4a',
 	},
 	fontSizes: {
-	  body: 15,
+	  body: 14,
 	  subheading: 16,
 	},
 	fonts: {

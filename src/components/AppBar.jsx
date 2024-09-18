@@ -56,11 +56,18 @@ const AppBar = () => {
   	<View style={styles.appBar}>
 		<ScrollView horizontal style={styles.flexRow}>
 		<AppBarTab buttonName="Repositories" link="/"/>
-			{isLoggedIn ? (
-				<AppBarTab buttonName="Sign out" onPress={onSignOut} />
+
+		{isLoggedIn ? (
+			<>
+			<AppBarTab buttonName="Create a review" link="/create-review" />
+			<AppBarTab buttonName="Sign out" onPress={onSignOut} />
+			</>
 			) : (
-				<AppBarTab buttonName="Sign in" link="/login" />
-			)}
+			<>
+			<AppBarTab buttonName="Sign in" link="/login" />
+			<AppBarTab buttonName="Sign up" link="/signup" />
+			</>
+		)}
 		</ScrollView>
 	</View>
   )

@@ -1,6 +1,7 @@
-import { View, StyleSheet, Image } from 'react-native';
+import { Pressable, View, StyleSheet, Image } from 'react-native';
 import Text from "./Text";
 import theme from '../theme';
+import * as Linking from 'expo-linking';
 
 const formatCount = (count) => {
 	if (count >= 1000000) {
@@ -39,6 +40,13 @@ const styles = StyleSheet.create({
 		padding: 5,
 		alignSelf: 'flex-start',
 	},
+	linkContainer: {
+		backgroundColor: theme.colors.primary,
+		borderRadius: 25,
+		marginTop: 15,
+		padding: 15,
+		alignItems: 'center',
+	},
 })
 
 const BasicInfo = ({ data }) => (
@@ -75,10 +83,23 @@ const DetailedInfo = ({ data }) => (
 	</View>
 )
 
-const RepositoryItem = ({ data }) => (
+const GitLink = ({ url }) => (
+		<View style={styles.linkContainer}>
+			<Pressable onPress={() => Linking.openURL(url)}>
+				<Text fontSize="subheading" fontWeight="bold" color="textInvert">
+					Open in GitHub
+				</Text>
+			</Pressable>
+		</View>
+)
+
+const RepositoryItem = ({ data, singleView }) => (
 	<View testID="repositoryItem" style={styles.flexContainer}>
 		<BasicInfo data={data} />
 		<DetailedInfo data={data} />
+		{ singleView && (
+			<GitLink url={data.url} />
+		)}
 	</View>
 );
 

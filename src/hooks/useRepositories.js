@@ -6,7 +6,6 @@ const useRepositories = () => {
 	const { data, ...result } = useQuery(GET_REPOSITORIES, {
 		fetchPolicy: 'cache-and-network',
 	});
-
 	return { repositories: data ? data.repositories : undefined, ...result };
 };
 
