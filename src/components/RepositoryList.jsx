@@ -1,7 +1,9 @@
 import { FlatList, Pressable, View, StyleSheet } from 'react-native';
 import RepositoryItem from "./RepositoryItem";
 import useRepositories from '../hooks/useRepositories';
+import HeaderComponent from './HeaderComponent/HeaderComponent';
 import { useNavigate } from 'react-router-native';
+import { useState } from 'react';
 
 const styles = StyleSheet.create({
 	separator: {
@@ -11,7 +13,7 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories }) => {
+export const RepositoryListContainer = ({ repositories, onOrderChange, orderBy }) => {
 	const repositoryNodes = repositories
 		? repositories.edges.map(edge => edge.node)
 		: [];
@@ -21,6 +23,7 @@ export const RepositoryListContainer = ({ repositories }) => {
 	return (
 		<FlatList
 			data={repositoryNodes}
+			ListHeaderComponent={() => <HeaderComponent onOrderChange={onOrderChange} orderBy={orderBy}/>}
 			ItemSeparatorComponent={ItemSeparator}
 			renderItem={({item}) => (
 				<Pressable onPress={() => navigate(`/repositories/${item.id}`)}>
@@ -32,9 +35,17 @@ export const RepositoryListContainer = ({ repositories }) => {
 }
 
 const RepositoryList = () => {
-	const { repositories } = useRepositories();
+	const [orderBy, setOrderBy] = useState({ label: 'Latest repositories', value: 'CREATED_AT', dir: 'DESC'});
+	const { repositories } = useRepositories(orderBy.value, orderBy.dir);
 
-	return <RepositoryListContainer repositories={repositories} />;
+	const handleOrder = (newOrder) => {
+		setOrderBy(newOrder);
+	};
+
+	return <RepositoryListContainer
+		repositories={repositories}
+		onOrderChange={handleOrder}
+		orderBy={orderBy} />;
 };
 
 export default RepositoryList;

@@ -77,7 +77,7 @@ const SingleRepository = () => {
 
 	if (loading) return <Text>Loading...</Text>;
 	if (error) return <Text>Error: {error.message}</Text>;
-	console.log(reviews);
+
 	return (
 			<FlatList
 				data={reviews}
