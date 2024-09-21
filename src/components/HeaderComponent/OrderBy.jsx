@@ -79,7 +79,7 @@ const OrderBy = ({onOrderChange, orderBy}) => {
 				onPress={() => setModalVisible(true)}>
 				<View style={styles.row}>
 					<Text color="textSecondary">{orderBy.label}</Text>
-					<MaterialIcons name="arrow-drop-down" size={24} color={theme.colors.textPrimary} />
+					<MaterialIcons name="arrow-drop-down" size={24} color={theme.colors.textSecondary} />
 				</View>
 			</Pressable>
 		</>
