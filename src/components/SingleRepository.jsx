@@ -69,7 +69,8 @@ const ReviewItem = ({ review }) => {
 
 const SingleRepository = () => {
 	const { id } = useParams();
-	const { repository, loading, error } = useRepository(id);
+	const { repository, loading, error, fetchMore } = useRepository(id, 8);
+	const onEndReach = () => fetchMore();
 
 	const reviews = repository
 		? repository.reviews.edges.map(edge => edge.node)
@@ -84,6 +85,8 @@ const SingleRepository = () => {
 				renderItem={({ item }) => <ReviewItem review={item} />}
 				ItemSeparatorComponent={ItemSeparator}
 				ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+				onEndReached={onEndReach}
+				onEndReachedThreshold={0.5}
 			/>
 	)
 }

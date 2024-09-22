@@ -22,13 +22,15 @@ export class RepositoryListContainer extends React.Component {
 	};
 
 	render() {
-		const { repositories, navigate } = this.props;
+		const { repositories, onEndReach, navigate } = this.props;
 		const repositoryNodes = repositories
 			? repositories.edges.map(edge => edge.node)
 			: [];
 
 		return (
 			<FlatList
+			onEndReached={onEndReach}
+			onEndReachedThreshold={0.5}
 			data={repositoryNodes}
 			ListHeaderComponent={this.renderHeader}
 			ItemSeparatorComponent={ItemSeparator}
@@ -45,15 +47,15 @@ export class RepositoryListContainer extends React.Component {
 const RepositoryList = () => {
 	const [orderBy, setOrderBy] = useState({
 		label: 'Latest repositories', value: 'CREATED_AT', dir: 'DESC', keyword: ''});
-	const { repositories } = useRepositories(orderBy.value, orderBy.dir, orderBy.keyword);
+	const { repositories, fetchMore } = useRepositories(orderBy.value, orderBy.dir, orderBy.keyword, 8);
 	const navigate = useNavigate();
 
-	const onOrderChange = (newOrder) => {
-		setOrderBy(newOrder);
-	};
+	const onOrderChange = (newOrder) => setOrderBy(newOrder);
+	const onEndReach = () => fetchMore();
 
 	return <RepositoryListContainer
 		repositories={repositories}
+		onEndReach={onEndReach}
 		navigate={navigate}
 		onOrderChange={onOrderChange}
 		orderBy={orderBy}

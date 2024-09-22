@@ -32,7 +32,9 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		borderColor: '#000000',
 		backgroundColor: theme.colors.primary,
-		padding: 10,
+		padding: 15,
+		marginTop: 5,
+		alignItems: 'center'
 	},
 })
 
@@ -79,7 +81,7 @@ export const SignInForm = ({ onSubmit }) => {
 				<Text style={{ color: theme.colors.error, paddingBottom: 5 }}>{formik.errors.password}</Text>
 			)}
 			<Pressable style={styles.buttonContainer} onPress={formik.handleSubmit}>
-				<Text color="textInvert">Sign in</Text>
+				<Text fontSize="subheading" fontWeight="bold" color="textInvert">Sign in</Text>
 			</Pressable>
 		</View>
 	)

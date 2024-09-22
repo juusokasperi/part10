@@ -18,7 +18,7 @@ export const REPOSITORY_BASE_FIELDS = gql`
 
 export const REVIEW_FIELDS = gql`
 	fragment reviewFields on Repository {
-		reviews {
+		reviews(first: $first, after: $after) {
 			edges {
 				node {
 					user {
@@ -28,6 +28,12 @@ export const REVIEW_FIELDS = gql`
 					text
 					createdAt
 				}
+				cursor
+			}
+			pageInfo {
+				startCursor
+				endCursor
+				hasNextPage
 			}
 		}
 	}
