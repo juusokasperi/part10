@@ -1,10 +1,12 @@
 import { ME } from '../graphql/queries';
-import { useQuery } from '@apollo/client';
-import theme from '../theme';
-import { FlatList, Pressable, View, StyleSheet } from 'react-native';
+import { DELETE_REVIEW } from '../graphql/mutations';
+import { useQuery, useMutation } from '@apollo/client';
+import { FlatList, Pressable, View, StyleSheet, Alert } from 'react-native';
 import Text from './Text';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-native';
+
+import theme from '../theme';
 
 const formatDate = (dateStr) => {
 	const date = new Date(dateStr);
@@ -58,8 +60,27 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const ReviewItem = ({ review }) => {
+const ReviewItem = ({ review, refetch }) => {
 	const navigate = useNavigate();
+	const [deleteReview] = useMutation(DELETE_REVIEW);
+
+	const handleDelete = (id) => {
+		Alert.alert('Delete review', 'Are you sure you want to delete this review?', [
+			{
+				text: 'Cancel',
+				style: 'cancel',
+			},
+			{
+				text: 'Delete',
+				onPress: () => {
+					deleteReview({
+						variables: { 'deleteReviewId': id },
+						onCompleted: () => { refetch(); },
+					})
+				},
+			},
+		]);
+	}
 
 	return (
 	<View style={styles.flexContainer}>
@@ -79,16 +100,16 @@ const ReviewItem = ({ review }) => {
 					View repository
 				</Text>
 			</Pressable>
-			<Pressable style={styles.deleteContainer} onPress={() => navigate(`/repositories/${review.repository.id}`)}>
+			<Pressable style={styles.deleteContainer} onPress={() => handleDelete(review.id)}>
 				<Text fontSize="subheading" fontWeight="bold" color="textInvert">
-					Delete Review
+					Delete review
 				</Text>
 			</Pressable>
 		</View>
 	</View>
 )};
 
-const MyReviewsList = ({ myReviews }) => {
+const MyReviewsList = ({ myReviews, refetch }) => {
 	const reviewNodes = myReviews
 		? myReviews.edges.map(edge => edge.node)
 		: [];
@@ -98,7 +119,7 @@ const MyReviewsList = ({ myReviews }) => {
 			data={reviewNodes}
 			ItemSeparatorComponent={ItemSeparator}
 			renderItem={({item}) => (
-				<ReviewItem review={item} />
+				<ReviewItem review={item} refetch={refetch} />
 				)}
 		/>
 	);
@@ -106,8 +127,9 @@ const MyReviewsList = ({ myReviews }) => {
 
 
 const MyReviews = () => {
-	const { data, loading, error } = useQuery(ME, {
+	const { data, loading, error, refetch } = useQuery(ME, {
 		variables: { "includeReviews": true },
+		fetchPolicy: 'cache-and-network',
 	});
 
 	if (loading)
@@ -116,7 +138,7 @@ const MyReviews = () => {
 		return <Text>Error loading reviews</Text>;
 	const myReviews = data?.me?.reviews;
 
-	return <MyReviewsList myReviews={myReviews}/>;
+	return <MyReviewsList myReviews={myReviews} refetch={refetch}/>;
 };
 
 export default MyReviews;
